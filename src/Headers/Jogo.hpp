@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include <Atirador.hpp>
 
 using namespace sf;
 
@@ -10,9 +11,11 @@ class Jogo
 {
     private: 
     RenderWindow* window;
+    Atirador* atirador;
 
     // --------------------------------- FUNCOES PRIVADAS ------------------------------------
     void initWindow();
+    void initAtirador();
 
 
 

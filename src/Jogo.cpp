@@ -8,16 +8,24 @@ void Jogo::initWindow(){
     this->window->setVerticalSyncEnabled(false);
 }
 
+void Jogo::initAtirador()
+{
+    this->atirador = new Atirador();
+}
+
 // --------------------------------- CONST/DEST ---------------------------------------
 Jogo::Jogo()
 {
     
     this->initWindow();
+    this->initAtirador();
+    
 }
 
 Jogo::~Jogo()
 {
     delete this->window;
+    delete this->atirador;
 }
 
 // --------------------------------------- FUNCOES ---------------------------------------
@@ -42,16 +50,35 @@ void Jogo::update()
         {
             this->window->close();
         }
-    } 
+    }
+    // Mover Atirador 
+
+    if (Keyboard::isKeyPressed(Keyboard::A))
+    {
+        this->atirador->move(-1.f, 0.f);
+    }
+    if (Keyboard::isKeyPressed(Keyboard::D))
+    {
+        this->atirador->move(1.f, 0.f);
+    }
+    if (Keyboard::isKeyPressed(Keyboard::W))
+    {
+        this->atirador->move(0.f, -1.f);
+    }
+    if (Keyboard::isKeyPressed(Keyboard::S))
+    {
+        this->atirador->move(0.f, 1.f);
+    }
 
 }
 
 void Jogo::render()
 {
     this->window->clear(Color::Black);
+    
     // draw all the stuffs
-
+    this->atirador->render(this->window);
 
     this->window->display();
-    
+
 }
