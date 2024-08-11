@@ -1,6 +1,7 @@
 #include "Headers/Jogo.hpp"
 #include "Jogo.hpp"
 
+
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
 void Jogo::initWindow(){
     this->window = new RenderWindow(VideoMode(800, 600), "Shoothemup", Style::Close | Style::Titlebar);
@@ -8,19 +9,22 @@ void Jogo::initWindow(){
     this->window->setVerticalSyncEnabled(false);
 }
 
+
 void Jogo::initAtirador()
 {
     this->atirador = new Atirador();
 }
 
+
 // --------------------------------- CONST/DEST ---------------------------------------
 Jogo::Jogo()
 {
-    
+   
     this->initWindow();
     this->initAtirador();
-    
+   
 }
+
 
 Jogo::~Jogo()
 {
@@ -28,9 +32,11 @@ Jogo::~Jogo()
     delete this->atirador;
 }
 
+
 // --------------------------------------- FUNCOES ---------------------------------------
 void Jogo::run()
 {
+
 
     while(this->window->isOpen())
     {
@@ -39,9 +45,9 @@ void Jogo::run()
     }
    
 }
-void Jogo::update()
+void Jogo::updatePollEvents()
 {
-    Event e;
+     Event e;
     while(this->window->pollEvent(e))
     {
         if(e.type == Event::Closed)
@@ -51,8 +57,12 @@ void Jogo::update()
             this->window->close();
         }
     }
-    // Mover Atirador 
+}
 
+
+void Jogo::updateImput()
+{
+    // Mover Jogador
     if (Keyboard::isKeyPressed(Keyboard::A))
     {
         this->atirador->move(-1.f, 0.f);
@@ -69,16 +79,29 @@ void Jogo::update()
     {
         this->atirador->move(0.f, 1.f);
     }
-
 }
+
+
+void Jogo::update()
+{
+   this->updatePollEvents();
+
+
+   this->updateImput();
+}
+
 
 void Jogo::render()
 {
     this->window->clear(Color::Black);
-    
-    // draw all the stuffs
+   
+    // desenhe todas as coisas
     this->atirador->render(this->window);
+
 
     this->window->display();
 
+
 }
+
+
