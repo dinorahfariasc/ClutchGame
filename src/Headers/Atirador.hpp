@@ -20,6 +20,9 @@ class Atirador{
         Atirador();
         virtual ~Atirador();
 
+        //Accesor
+        const Vector2f& getPos() const;
+        
         // --------------------------------- FUNCOES Publicas------------------------------------
         void move(const float dirX, const float dirY);
         
