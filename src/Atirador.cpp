@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Atirador.hpp"
 
 using namespace sf;
 using namespace std;
@@ -17,7 +18,7 @@ Atirador::Atirador()
 
 void Atirador::initTexture()
 {
-    if (!this->texture.loadFromFile("C:/Users/dina/Desktop/TesteSTU/Shoothemup-main/Assests/Personagem/handgun.png"))
+    if (!this->texture.loadFromFile("Assests/Personagem/handgun.png"))
     {
         cout << "ERRO: Nao foi possivel carregar a textura do atirador" << endl;
     }
@@ -36,6 +37,12 @@ Atirador::~Atirador()
     
 }
 
+const Vector2f &Atirador::getPos() const
+{
+    return this->sprite.getPosition();
+}
+
+    // TODO: inserir instrução return aqui
 // --------------------------------------- FUNCOES ---------------------------------------
 
 void Atirador::move(const float dirX, const float dirY)
