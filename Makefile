@@ -11,7 +11,7 @@ HEADERS_DIR = src/Headers
 # Compilador e flags
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Wextra -g
-LDFLAGS = -L$(LIB_DIR) -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS = -L$(LIB_DIR) -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 INC = -I$(INCLUDE_DIR) -I$(HEADERS_DIR)
 
 # Listar todos os arquivos fonte .cpp
