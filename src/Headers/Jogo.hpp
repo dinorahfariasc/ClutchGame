@@ -7,6 +7,7 @@
 #include<map>
 #include <Atirador.hpp>
 #include "Projetil.hpp"
+#include "Inimigo.hpp"
 
 using namespace sf;
 
@@ -22,8 +23,11 @@ class Jogo
     std::map<std::string, sf::Texture*> texture;
     std::vector<Projetil*> projetil;
 
-
+    //Atirador
     Atirador* atirador;
+
+    //Inimigo
+    Inimigo* inimigo;
 
 
     // --------------------------------- FUNCOES PRIVADAS ------------------------------------

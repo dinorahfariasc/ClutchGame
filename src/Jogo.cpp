@@ -19,6 +19,8 @@ void Jogo::initTextures()
 void Jogo::initAtirador()
 {
     this->atirador = new Atirador();
+
+    this->inimigo = new Inimigo(20.f, 20.f);
 }
 
 
@@ -149,6 +151,8 @@ void Jogo::render()
     {
         projetil->render(this->window);
     }
+
+    this->inimigo->render(this->window);
 
     this->window->display();
 

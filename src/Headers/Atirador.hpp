@@ -29,7 +29,7 @@ class Atirador{
         
         // --------------------------------- FUNCOES Publicas------------------------------------
         void move(const float dirX, const float dirY);
-        const bool canAttack();
+        bool canAttack();
 
         void updateAttack();
         void update();
