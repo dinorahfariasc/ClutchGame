@@ -98,17 +98,30 @@ void Jogo::updateImput()
         this->atirador->move(0.f, 1.f);
     }
 
-    if (Mouse::isButtonPressed(Mouse::Left))
+    if (Mouse::isButtonPressed(Mouse::Left) && this->atirador->canAttack())
     {
-        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], this->atirador->getPos(). x, this->atirador->getPos(). y, 0.f, 0.f, 0.f));
+        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], this->atirador->getPos(). x, this->atirador->getPos(). y, 0.f, -1.f, 5.f));
     }
 }
 
 void Jogo::updateProjetil()
 {
-     for (auto *projetil : this->projetil)
+    unsigned counter = 0;
+    for (auto *projetil : this->projetil)
     {
         projetil->update();
+
+        //seleção de balas (parte superior da tela)
+        if (projetil->getBounds().top + projetil->getBounds().height < 0.f)
+        {
+            //Apagar projetil
+            delete projetil;
+            this->projetil.erase(this->projetil.begin() + counter);
+            --counter;
+        }
+
+        ++counter;
+
     }
 
 }
@@ -118,6 +131,8 @@ void Jogo::update()
    this->updatePollEvents();
 
    this->updateImput();
+
+   this->atirador->update();
 
    this->updateProjetil();
 }

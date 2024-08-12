@@ -12,7 +12,11 @@ class Atirador{
         Texture texture;
         float movementSpeed;
 
+        float attackCooldown;
+        float attackCooldownMax;
+
         // --------------------------------- FUNCOES PRIVADAS ------------------------------------
+        void initVariables();
         void initTexture();
         void initSprite();
    
@@ -25,7 +29,9 @@ class Atirador{
         
         // --------------------------------- FUNCOES Publicas------------------------------------
         void move(const float dirX, const float dirY);
-        
+        const bool canAttack();
+
+        void updateAttack();
         void update();
         void render(RenderTarget* target);
 

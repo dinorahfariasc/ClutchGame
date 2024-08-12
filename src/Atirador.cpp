@@ -10,11 +10,17 @@ using namespace std;
 
 Atirador::Atirador() 
 {
-    this->movementSpeed = 5.f;
+    this->initVariables();
     this->initTexture();
     this->initSprite();
 }
 
+void Atirador::initVariables()
+{
+     this->movementSpeed = 5.f;
+     this->attackCooldownMax = 10.f;
+     this->attackCooldown = this->attackCooldownMax;
+}
 
 void Atirador::initTexture()
 {
@@ -48,13 +54,27 @@ const Vector2f &Atirador::getPos() const
 void Atirador::move(const float dirX, const float dirY)
 {
     this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
-} 
- 
+}
+
+const bool Atirador::canAttack() 
+{
+    if (this->attackCooldown >= this->attackCooldownMax)
+    {
+        this->attackCooldown = 0.f;
+        return true;
+    }
+    return false;
+}
+
+void Atirador::updateAttack()
+{
+    if(this->attackCooldown < this->attackCooldownMax)
+        this->attackCooldown += 0.5f;
+}
 
 void Atirador::update()
 {
-
-
+    this->updateAttack();
 }
 
 void Atirador::render(RenderTarget* target)

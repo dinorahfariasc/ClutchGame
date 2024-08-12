@@ -33,14 +33,14 @@ void Menu::setValues(){
     
     pos =0;
     pressed = false;
-    font->loadFromFile("C:/Users/dina/Desktop/TesteSTU/Shoothemup-main/Assests/Fonts/MetalSlug.otf");
-    image->loadFromFile("C:/Users/dina/Desktop/TesteSTU/Shoothemup-main/Assests/BG/bgMenu2.jpg");
+    font->loadFromFile("Assests/Fonts/MetalSlug.otf");
+    image->loadFromFile("Assests/BG/bgMenu2.jpg");
 
     bg->setTexture(*image);
     posmouse = {0, 0};
     coormouse = {0, 0};
 
-    music->openFromFile("C:/Users/dina/Desktop/TesteSTU/Shoothemup-main/Assests/Sounds/csThemeSong.mp3");
+    music->openFromFile("Assests/Sounds/csThemeSong.mp3");
     music->setLoop(true);  // Configura a música para repetir continuamente
     music->play();
 
