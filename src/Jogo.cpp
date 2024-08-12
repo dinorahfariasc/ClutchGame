@@ -9,6 +9,12 @@ void Jogo::initWindow(){
     this->window->setVerticalSyncEnabled(false);
 }
 
+void Jogo::initTextures()
+{
+    this->texture["PROJETIL"] = new sf::Texture();
+    this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
+}
+
 
 void Jogo::initAtirador()
 {
@@ -21,6 +27,7 @@ Jogo::Jogo()
 {
    
     this->initWindow();
+    this->initTextures();
     this->initAtirador();
    
 }
@@ -30,6 +37,17 @@ Jogo::~Jogo()
 {
     delete this->window;
     delete this->atirador;
+
+    //Delete textures
+    for (auto &i : this->texture)
+    {
+        delete i.second;
+    }
+    //Delete Projeteis
+    for (auto *i : this->projetil)
+    {
+        delete i;
+    }
 }
 
 
@@ -79,15 +97,29 @@ void Jogo::updateImput()
     {
         this->atirador->move(0.f, 1.f);
     }
+
+    if (Mouse::isButtonPressed(Mouse::Left))
+    {
+        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], this->atirador->getPos(). x, this->atirador->getPos(). y, 0.f, 0.f, 0.f));
+    }
 }
 
+void Jogo::updateProjetil()
+{
+     for (auto *projetil : this->projetil)
+    {
+        projetil->update();
+    }
+
+}
 
 void Jogo::update()
 {
    this->updatePollEvents();
 
-
    this->updateImput();
+
+   this->updateProjetil();
 }
 
 
@@ -98,6 +130,10 @@ void Jogo::render()
     // desenhe todas as coisas
     this->atirador->render(this->window);
 
+    for (auto *projetil : this->projetil)
+    {
+        projetil->render(this->window);
+    }
 
     this->window->display();
 
