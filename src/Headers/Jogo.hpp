@@ -20,8 +20,9 @@ class Jogo
 
 
     //Recursos
-    std::map<std::string, sf::Texture*> texture;
-    std::vector<Projetil*> projetil;
+    map<std::string, sf::Texture*> texture;
+    vector<Projetil*> projetil;
+    Sprite background;
 
     //Atirador
     Atirador* atirador;

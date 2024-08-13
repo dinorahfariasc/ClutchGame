@@ -3,18 +3,25 @@
 #include "Headers/Inimigo.hpp"
 #include <math.h>
 
+using namespace sf;
+using namespace std;
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
 void Jogo::initWindow(){
     this->window = new RenderWindow(VideoMode(800, 600), "Shoothemup", Style::Close | Style::Titlebar);
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
+
+
 }
 
 void Jogo::initTextures()
 {
-    this->texture["PROJETIL"] = new sf::Texture();
+    this->texture["PROJETIL"] = new Texture();
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
+
+    this->texture["BACKGROUND"] = new Texture();
+    this->texture["BACKGROUND"]->loadFromFile("Assests/BG/bgTeste.png");
 }
 
 
@@ -40,6 +47,7 @@ Jogo::Jogo()
     this->initTextures();
     this->initAtirador();
     this->initInimigo();
+    this->background.setTexture(*this->texture["BACKGROUND"]);
    
 }
 
@@ -195,7 +203,9 @@ void Jogo::update()
 void Jogo::render()
 {
     this->window->clear(Color::Black);
-   
+    
+    this->window->draw(this->background);
+
     // desenhe todas as coisas
     this->atirador->render(this->window);
 
