@@ -8,7 +8,7 @@ using namespace std;
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
 void Jogo::initWindow(){
-    this->window = new RenderWindow(VideoMode(800, 600), "Shoothemup", Style::Close | Style::Titlebar);
+    this->window = new RenderWindow(VideoMode(800, 800), "Shoothemup", Style::Close | Style::Titlebar);
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 
@@ -21,7 +21,7 @@ void Jogo::initTextures()
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
 
     this->texture["BACKGROUND"] = new Texture();
-    this->texture["BACKGROUND"]->loadFromFile("Assests/BG/bgTeste.png");
+    this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
 }
 
 

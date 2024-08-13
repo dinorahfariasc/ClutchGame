@@ -97,9 +97,9 @@ void Menu::loopEvents(){
             theselected = true;
             if (pos == 1){
                 music->stop();
-                window->close();
                 Jogo* jogo = new Jogo();
                 jogo->run();
+                window->close();
                 delete jogo;
                 jogo = nullptr;
                 

@@ -13,9 +13,6 @@ using namespace std;
 int main()
 {
     srand(time(static_cast<unsigned>(0))); 
-    // Jogo jogo;
-
-    // jogo.run();
 
     Menu* menu = new Menu();
     menu->runMenu();
