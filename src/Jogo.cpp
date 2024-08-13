@@ -1,5 +1,6 @@
 #include "Headers/Jogo.hpp"
 #include "Jogo.hpp"
+#include "Headers/Inimigo.hpp"
 
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
@@ -20,8 +21,14 @@ void Jogo::initAtirador()
 {
     this->atirador = new Atirador();
 
-    this->inimigo = new Inimigo(20.f, 20.f);
 }
+
+void Jogo::initInimigo()
+{
+    this->spawnTimerMax = 50.f;
+    this->spawnTimer = this->spawnTimerMax;
+}   
+
 
 
 // --------------------------------- CONST/DEST ---------------------------------------
@@ -31,6 +38,7 @@ Jogo::Jogo()
     this->initWindow();
     this->initTextures();
     this->initAtirador();
+    this->initInimigo();
    
 }
 
@@ -47,6 +55,11 @@ Jogo::~Jogo()
     }
     //Delete Projeteis
     for (auto *i : this->projetil)
+    {
+        delete i;
+    }
+    //Delete Inimigos
+    for (auto *i : this->inimigos)
     {
         delete i;
     }
@@ -102,7 +115,10 @@ void Jogo::updateImput()
 
     if (Mouse::isButtonPressed(Mouse::Left) && this->atirador->canAttack())
     {
-        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], this->atirador->getPos(). x, this->atirador->getPos(). y, 0.f, -1.f, 5.f));
+        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
+        this->atirador->getPos().x + 55.f - 2.5f, //posição do projetil
+        this->atirador->getPos().y + 22.f, 
+        0.f, -1.f, 5.f));
     }
 }
 
@@ -128,6 +144,22 @@ void Jogo::updateProjetil()
 
 }
 
+void Jogo::updateInimigo()
+{
+    this->spawnTimer += 0.5f;
+    if (this->spawnTimer >= this->spawnTimerMax)
+    {
+        this->inimigos.push_back(new Inimigo(rand()%200,rand()%200)); // gerando inimigos em pos aleatorias
+        this->spawnTimer = 0.f;
+    }
+    
+    for (auto *inimigo : this->inimigos)
+    {
+        inimigo->update();
+    }
+    
+}
+
 void Jogo::update()
 {
    this->updatePollEvents();
@@ -137,6 +169,8 @@ void Jogo::update()
    this->atirador->update();
 
    this->updateProjetil();
+
+   this->updateInimigo();
 }
 
 
@@ -152,7 +186,11 @@ void Jogo::render()
         projetil->render(this->window);
     }
 
-    this->inimigo->render(this->window);
+    for (auto *inimigo : this->inimigos)
+    {
+        inimigo->render(this->window);
+    }
+
 
     this->window->display();
 

@@ -48,6 +48,11 @@ const Vector2f &Atirador::getPos() const
     return this->sprite.getPosition();
 }
 
+const FloatRect Atirador::getBounds() const
+{
+    return this->sprite.getGlobalBounds();
+}
+
     // TODO: inserir instrução return aqui
 // --------------------------------------- FUNCOES ---------------------------------------
 
@@ -56,7 +61,7 @@ void Atirador::move(const float dirX, const float dirY)
     this->sprite.move(this->movementSpeed * dirX, this->movementSpeed * dirY);
 }
 
-const bool Atirador::canAttack() 
+bool Atirador::canAttack() 
 {
     if (this->attackCooldown >= this->attackCooldownMax)
     {

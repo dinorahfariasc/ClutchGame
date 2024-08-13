@@ -26,7 +26,8 @@ class Atirador{
 
         //Accesor
         const Vector2f& getPos() const;
-        
+        const FloatRect getBounds() const;
+
         // --------------------------------- FUNCOES Publicas------------------------------------
         void move(const float dirX, const float dirY);
         bool canAttack();

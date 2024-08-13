@@ -10,7 +10,7 @@
 #include "Inimigo.hpp"
 
 using namespace sf;
-
+using namespace std;
 
 class Jogo
 {
@@ -27,16 +27,16 @@ class Jogo
     Atirador* atirador;
 
     //Inimigo
-    Inimigo* inimigo;
-
+    float spawnTimer;
+    float spawnTimerMax;
+    vector<Inimigo*> inimigos;
 
     // --------------------------------- FUNCOES PRIVADAS ------------------------------------
     void initWindow();
     void initTextures();
+    void initInimigo();
     void initAtirador();
-
-
-
+    
 
 
 
@@ -51,6 +51,7 @@ class Jogo
         void updatePollEvents();
         void updateImput();
         void updateProjetil();
+        void updateInimigo();
         void update();
         void render();
 
