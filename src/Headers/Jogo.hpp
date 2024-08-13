@@ -49,7 +49,7 @@ class Jogo
 
 
         void updatePollEvents();
-        void updateImput();
+        void updateInput();
         void updateProjetil();
         void updateInimigo();
         void update();

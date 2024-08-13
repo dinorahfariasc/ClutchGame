@@ -1,6 +1,7 @@
 #include "Headers/Jogo.hpp"
 #include "Jogo.hpp"
 #include "Headers/Inimigo.hpp"
+#include <math.h>
 
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
@@ -93,7 +94,7 @@ void Jogo::updatePollEvents()
 }
 
 
-void Jogo::updateImput()
+void Jogo::updateInput()
 {
     // Mover Jogador
     if (Keyboard::isKeyPressed(Keyboard::A))
@@ -113,12 +114,29 @@ void Jogo::updateImput()
         this->atirador->move(0.f, 1.f);
     }
 
+
+
+    // Atirar Projetil
     if (Mouse::isButtonPressed(Mouse::Left) && this->atirador->canAttack())
     {
+        // Posição do mouse
+        sf::Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+
+        // Posição do atirador
+        sf::Vector2f atiradorPos = this->atirador->getPos();
+
+        // Direção do projetil
+        sf::Vector2f dir = mousePos - atiradorPos;
+
+        // Normalizar a direção
+        float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
+        sf::Vector2f direction = dir / magnitude;
+
+        // Criação do projetil com a direção calculada
         this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
-        this->atirador->getPos().x + 55.f - 2.5f, //posição do projetil
-        this->atirador->getPos().y + 22.f, 
-        0.f, -1.f, 5.f));
+                                              atiradorPos.x + 55.f - 2.5f, //posição do projetil
+                                              atiradorPos.y + 22.f, 
+                                              direction.x, direction.y, 5.f));
     }
 }
 
@@ -164,7 +182,7 @@ void Jogo::update()
 {
    this->updatePollEvents();
 
-   this->updateImput();
+   this->updateInput();
 
    this->atirador->update();
 
