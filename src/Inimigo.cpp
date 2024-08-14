@@ -10,6 +10,7 @@ void Inimigo::initShape()
 void Inimigo::initVariable()
 {
    this->type     = 0;
+   this->speed    = 5.f;
    this->hpMax    = 10;
    this->hp       = 0;
    this->demage   = 1;
@@ -21,6 +22,7 @@ Inimigo::Inimigo(float pos_x, float pos_y)
 {
     this->initShape();
     this->initVariable();
+    
     this->shape.setPosition(pos_x, pos_y);
 
 }
@@ -28,9 +30,21 @@ Inimigo::Inimigo(float pos_x, float pos_y)
 Inimigo::~Inimigo()
 {
 }
- //Funções
+const sf::FloatRect Inimigo::getBounds() const
+{
+    return sf::FloatRect();
+}
+
+//Accessors
+const sf::FloatRect Inimigo::getBounds() const
+{
+    return this->shape.getGlobalBounds();
+}
+
+// Funções
 void Inimigo::update()
 {
+    this->shape.move(0.f, this->speed);
 }
 
 void Inimigo::render(sf::RenderTarget * target)

@@ -8,6 +8,7 @@ class Inimigo
 private:
     sf::CircleShape shape;
     int type;
+    float speed;
     int hp;
     int hpMax;
     int demage;
@@ -20,6 +21,9 @@ private:
 public:
     Inimigo(float pos_x, float pos_y);
     virtual ~Inimigo();
+
+    //Accessors
+    const sf::FloatRect getBounds() const;
 
     //Funções
     void update();

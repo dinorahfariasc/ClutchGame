@@ -175,14 +175,22 @@ void Jogo::updateInimigo()
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
     {
-        this->inimigos.push_back(new Inimigo(rand()%200,rand()%200)); // gerando inimigos em pos aleatorias
+        this->inimigos.push_back(new Inimigo(rand() % this->window->getSize().x-20.f, -100.f)); // gerando inimigos em pos aleatorias
         this->spawnTimer = 0.f;
     }
     
-    for (auto *inimigo : this->inimigos)
+    for (int i = 0; i < this->inimigos.size(); ++i)
     {
-        inimigo->update();
+        this->inimigos[i]->update();
+
+        //Remove os inimigos na parte inferior da tela
+        if (this->inimigos[i]->getBounds().top > this->window->getSize().y)
+        {
+            this->inimigos.erase(this->inimigos.begin() + i);
+            std::cout << this->inimigos.size() << "\n";
+        }
     }
+
     
 }
 
