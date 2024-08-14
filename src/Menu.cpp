@@ -98,8 +98,8 @@ void Menu::loopEvents(){
             if (pos == 1){
                 music->stop();
                 Jogo* jogo = new Jogo();
-                jogo->run();
                 window->close();
+                jogo->run();
                 delete jogo;
                 jogo = nullptr;
                 

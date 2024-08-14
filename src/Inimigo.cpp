@@ -32,12 +32,6 @@ Inimigo::~Inimigo()
 }
 const sf::FloatRect Inimigo::getBounds() const
 {
-    return sf::FloatRect();
-}
-
-//Accessors
-const sf::FloatRect Inimigo::getBounds() const
-{
     return this->shape.getGlobalBounds();
 }
 
