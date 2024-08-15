@@ -2,35 +2,36 @@
 #define INIMIGO_HPP
 
 #include <SFML/Graphics.hpp>
-
-using namespace sf;
+#include "ProjetilInimigo.hpp"
+#include <vector>
 
 class Inimigo
 {
 private:
     sf::CircleShape shape;
-    int type;
+    std::vector<ProjetilInimigo*> projeteis;
+    sf::Texture* texture; // Textura do projetil
+    sf::Vector2f direction;
     float speed;
-    int hp;
     int hpMax;
+    int hp;
     int demage;
     int points;
-    sf::Vector2f direction;
+    float atirarTimer; // Timer para controlar a frequência dos tiros
+    float atirarTimerMax; // Frequência máxima para atirar
 
     void initShape();
     void initVariable();
-
+    void atirar(sf::Vector2f atiradorPos);
+    void updateProjetil();
 
 public:
-    Inimigo(float pos_x, float pos_y, Vector2f atiradorPos);
+    Inimigo(float pos_x, float pos_y, sf::Texture* texture, sf::Vector2f atiradorPos);
     virtual ~Inimigo();
 
-    //Accessors
     const sf::FloatRect getBounds() const;
-
-    //Funções
     void update(sf::Vector2f atiradorPos);
-    void render(sf::RenderTarget *target);
+    void render(sf::RenderTarget* target);
 };
 
-#endif // INIMIGO_HPP
+#endif

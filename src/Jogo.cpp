@@ -20,6 +20,9 @@ void Jogo::initTextures()
     this->texture["PROJETIL"] = new Texture();
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
 
+    this->texture["PROJETIL2"] = new Texture();
+    this->texture["PROJETIL2"]->loadFromFile("Assets/Projetil/projetil2.png");
+
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
 }
@@ -54,24 +57,28 @@ Jogo::Jogo()
 
 Jogo::~Jogo()
 {
-    delete this->window;
+     delete this->window;
     delete this->atirador;
 
-    //Delete textures
-    for (auto &i : this->texture)
+    // Delete textures
+    for (auto& texturePair : this->texture)
     {
-        delete i.second;
+        delete texturePair.second;
     }
-    //Delete Projeteis
-    for (auto *i : this->projetil)
+
+    // Delete Projeteis
+    for (auto* projetil : this->projetil)
     {
-        delete i;
+        delete projetil;
     }
-    //Delete Inimigos
-    for (auto *i : this->inimigos)
+    this->projetil.clear(); // Limpa o vetor após deletar
+
+    // Delete Inimigos
+    for (auto* inimigo : this->inimigos)
     {
-        delete i;
+        delete inimigo;
     }
+    this->inimigos.clear(); // Limpa o vetor após deletar
 }
 
 
@@ -175,46 +182,28 @@ void Jogo::updateInimigo()
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
     {
-        // Gerar uma posição aleatória na borda
-        int border = rand() % 4;
-        float posX, posY;
-        if (border == 0) { // Topo
-            posX = rand() % this->window->getSize().x;
-            posY = 0.f;
-        } else if (border == 1) { // Inferior
-            posX = rand() % this->window->getSize().x;
-            posY = this->window->getSize().y - 20.f;
-        } else if (border == 2) { // Esquerda
-            posX = 0.f;
-            posY = rand() % this->window->getSize().y;
-        } else { // Direita
-            posX = this->window->getSize().x - 20.f;
-            posY = rand() % this->window->getSize().y;
-        }
-
-        // Criar inimigo na borda com a posição inicial do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
-        this->inimigos.push_back(new Inimigo(posX, posY, atiradorPos));
-
+        this->inimigos.push_back(new Inimigo(
+            rand() % this->window->getSize().x - 20.f, 
+            -100.f, 
+            this->texture["PROJETIL"], // Adicione a textura correta aqui
+            this->atirador->getPos()
+        ));
         this->spawnTimer = 0.f;
     }
-    
-    for (int i = 0; i < this->inimigos.size(); ++i)
-    {
-        // Atualizar a direção do inimigo para a posição atual do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
-        this->inimigos[i]->update(atiradorPos);
 
-        // Remove os inimigos fora da tela (ajuste se necessário)
-        if (this->inimigos[i]->getBounds().top > this->window->getSize().y ||
-            this->inimigos[i]->getBounds().left > this->window->getSize().x ||
-            this->inimigos[i]->getBounds().left + this->inimigos[i]->getBounds().width < 0 ||
-            this->inimigos[i]->getBounds().top + this->inimigos[i]->getBounds().height < 0)
+    for (size_t i = 0; i < this->inimigos.size(); ++i)
+    {
+        this->inimigos[i]->update(this->atirador->getPos());
+
+        // Remove inimigos que saem da tela
+        if (this->inimigos[i]->getBounds().top > this->window->getSize().y)
         {
+            delete this->inimigos[i];
             this->inimigos.erase(this->inimigos.begin() + i);
         }
     }
 }
+
 
 
 void Jogo::update()
@@ -237,23 +226,20 @@ void Jogo::render()
     
     this->window->draw(this->background);
 
-    // desenhe todas as coisas
+    // Renderizar todas as coisas
     this->atirador->render(this->window);
 
-    for (auto *projetil : this->projetil)
+    for (auto* projetil : this->projetil)
     {
         projetil->render(this->window);
     }
 
-    for (auto *inimigo : this->inimigos)
+    for (auto* inimigo : this->inimigos)
     {
         inimigo->render(this->window);
     }
 
-
     this->window->display();
-
-
 }
 
 
