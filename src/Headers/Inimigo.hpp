@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 class Inimigo
 {
 private:
@@ -13,21 +15,22 @@ private:
     int hpMax;
     int demage;
     int points;
+    sf::Vector2f direction;
 
     void initShape();
     void initVariable();
 
 
 public:
-    Inimigo(float pos_x, float pos_y);
+    Inimigo(float pos_x, float pos_y, Vector2f atiradorPos);
     virtual ~Inimigo();
 
     //Accessors
     const sf::FloatRect getBounds() const;
 
     //Funções
-    void update();
-    void render(sf::RenderTarget* target);
+    void update(sf::Vector2f atiradorPos);
+    void render(sf::RenderTarget *target);
 };
 
-#endif
+#endif // INIMIGO_HPP
