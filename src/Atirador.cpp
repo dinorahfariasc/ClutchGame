@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Atirador.hpp"
+#include <math.h>
 
 using namespace sf;
 using namespace std;
@@ -75,6 +76,18 @@ void Atirador::updateAttack()
 {
     if(this->attackCooldown < this->attackCooldownMax)
         this->attackCooldown += 0.5f;
+}
+
+void Atirador::updateRotation(const Vector2f &mousePos)
+{
+    Vector2f atiradorPos = this->sprite.getPosition();
+
+    float deltaX = mousePos.x - atiradorPos.x;
+    float deltaY = mousePos.y - atiradorPos.y;
+
+    float angle = std::atan2(deltaY, deltaX) * 180.f / 3.14159f;
+
+    this->sprite.setRotation(angle + 90.f); //+90.f para alinhar o sprite corretamente 
 }
 
 void Atirador::update()

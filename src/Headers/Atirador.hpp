@@ -33,6 +33,7 @@ class Atirador{
         bool canAttack();
 
         void updateAttack();
+        void updateRotation(const Vector2f& mousePos); //atualizar a rotação
         void update();
         void render(RenderTarget* target);
 

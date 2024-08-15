@@ -223,6 +223,10 @@ void Jogo::update()
 
    this->updateInput();
 
+   Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+
+   this->atirador->updateRotation(mousePos);
+
    this->atirador->update();
 
    this->updateProjetil();
