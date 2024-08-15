@@ -21,7 +21,7 @@ void Jogo::initTextures()
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
 
     this->texture["PROJETIL2"] = new Texture();
-    this->texture["PROJETIL2"]->loadFromFile("Assets/Projetil/projetil2.png");
+    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/projetil2.png");
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
@@ -182,24 +182,49 @@ void Jogo::updateInimigo()
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
     {
-        this->inimigos.push_back(new Inimigo(
-            rand() % this->window->getSize().x - 20.f, 
-            -100.f, 
-            this->texture["PROJETIL"], // Adicione a textura correta aqui
-            this->atirador->getPos()
-        ));
+        // Gera uma posição aleatória para o inimigo em uma das quatro bordas
+        float x = 0.f;
+        float y = 0.f;
+        int edge = rand() % 4; // 0: superior, 1: inferior, 2: esquerda, 3: direita
+        switch (edge)
+        {
+            case 0: // Superior
+                x = rand() % this->window->getSize().x;
+                y = -50.f; // Posição acima da tela
+                break;
+            case 1: // Inferior
+                x = rand() % this->window->getSize().x;
+                y = this->window->getSize().y + 50.f; // Posição abaixo da tela
+                break;
+            case 2: // Esquerda
+                x = -50.f; // Posição à esquerda da tela
+                y = rand() % this->window->getSize().y;
+                break;
+            case 3: // Direita
+                x = this->window->getSize().x + 50.f; // Posição à direita da tela
+                y = rand() % this->window->getSize().y;
+                break;
+        }
+
+        // Adiciona o inimigo à lista com a nova posição
+        this->inimigos.push_back(new Inimigo(x, y, this->texture["PROJETIL2"],this->atirador->getPos()));
         this->spawnTimer = 0.f;
     }
 
+    // todo remover inimigos apenas se forem atingindos ! 
     for (size_t i = 0; i < this->inimigos.size(); ++i)
     {
         this->inimigos[i]->update(this->atirador->getPos());
 
         // Remove inimigos que saem da tela
-        if (this->inimigos[i]->getBounds().top > this->window->getSize().y)
+        if (this->inimigos[i]->getBounds().top > this->window->getSize().y ||
+            this->inimigos[i]->getBounds().left + this->inimigos[i]->getBounds().width < 0 ||
+            this->inimigos[i]->getBounds().top + this->inimigos[i]->getBounds().height < 0 ||
+            this->inimigos[i]->getBounds().left > this->window->getSize().x)
         {
             delete this->inimigos[i];
             this->inimigos.erase(this->inimigos.begin() + i);
+            --i; // Ajusta o índice após a remoção
         }
     }
 }
