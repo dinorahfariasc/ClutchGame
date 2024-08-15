@@ -1,4 +1,7 @@
 #include "Inimigo.hpp"
+#include <math.h>
+
+using namespace sf;
 
 void Inimigo::initShape()
 {
@@ -18,12 +21,14 @@ void Inimigo::initVariable()
 }
 
 
-Inimigo::Inimigo(float pos_x, float pos_y)
+Inimigo::Inimigo(float pos_x, float pos_y, Vector2f atiradorPos)
 {
     this->initShape();
     this->initVariable();
-    
     this->shape.setPosition(pos_x, pos_y);
+    Vector2f dir = atiradorPos - this->shape.getPosition();
+    float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
+    this->direction = dir / magnitude;
 
 }
 
@@ -36,9 +41,15 @@ const sf::FloatRect Inimigo::getBounds() const
 }
 
 // Funções
-void Inimigo::update()
+void Inimigo::update(sf::Vector2f atiradorPos)
 {
-    this->shape.move(0.f, this->speed);
+    // Recalcula a direção para a posição atual do atirador
+    sf::Vector2f dir = atiradorPos - this->shape.getPosition();
+    float magnitude = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+    this->direction = dir / magnitude;
+
+    // Atualiza a posição do inimigo
+    this->shape.move(this->direction * this->speed);
 }
 
 void Inimigo::render(sf::RenderTarget * target)

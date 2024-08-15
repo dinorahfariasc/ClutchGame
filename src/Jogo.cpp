@@ -175,24 +175,47 @@ void Jogo::updateInimigo()
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
     {
-        this->inimigos.push_back(new Inimigo(rand() % this->window->getSize().x-20.f, -100.f)); // gerando inimigos em pos aleatorias
+        // Gerar uma posição aleatória na borda
+        int border = rand() % 4;
+        float posX, posY;
+        if (border == 0) { // Topo
+            posX = rand() % this->window->getSize().x;
+            posY = 0.f;
+        } else if (border == 1) { // Inferior
+            posX = rand() % this->window->getSize().x;
+            posY = this->window->getSize().y - 20.f;
+        } else if (border == 2) { // Esquerda
+            posX = 0.f;
+            posY = rand() % this->window->getSize().y;
+        } else { // Direita
+            posX = this->window->getSize().x - 20.f;
+            posY = rand() % this->window->getSize().y;
+        }
+
+        // Criar inimigo na borda com a posição inicial do atirador
+        sf::Vector2f atiradorPos = this->atirador->getPos();
+        this->inimigos.push_back(new Inimigo(posX, posY, atiradorPos));
+
         this->spawnTimer = 0.f;
     }
     
     for (int i = 0; i < this->inimigos.size(); ++i)
     {
-        this->inimigos[i]->update();
+        // Atualizar a direção do inimigo para a posição atual do atirador
+        sf::Vector2f atiradorPos = this->atirador->getPos();
+        this->inimigos[i]->update(atiradorPos);
 
-        //Remove os inimigos na parte inferior da tela
-        if (this->inimigos[i]->getBounds().top > this->window->getSize().y)
+        // Remove os inimigos fora da tela (ajuste se necessário)
+        if (this->inimigos[i]->getBounds().top > this->window->getSize().y ||
+            this->inimigos[i]->getBounds().left > this->window->getSize().x ||
+            this->inimigos[i]->getBounds().left + this->inimigos[i]->getBounds().width < 0 ||
+            this->inimigos[i]->getBounds().top + this->inimigos[i]->getBounds().height < 0)
         {
             this->inimigos.erase(this->inimigos.begin() + i);
-            std::cout << this->inimigos.size() << "\n";
         }
     }
-
-    
 }
+
 
 void Jogo::update()
 {
@@ -234,4 +257,3 @@ void Jogo::render()
 }
 
 
-// teste
