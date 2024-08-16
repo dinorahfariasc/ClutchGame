@@ -52,7 +52,7 @@ class Jogo
         void updatePollEvents();
         void updateInput();
         void updateProjetil();
-        void updateInimigo();
+        void updateInimigoeCombate();
         void update();
         void render();
 

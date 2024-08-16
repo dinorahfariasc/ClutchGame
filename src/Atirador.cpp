@@ -90,6 +90,15 @@ void Atirador::updateRotation(const Vector2f &mousePos)
     this->sprite.setRotation(angle + 90.f); //+90.f para alinhar o sprite corretamente 
 }
 
+void Atirador::takeDamage(int dano)
+{
+    this->vida -= dano;
+    if (this->vida <= 0)
+    {
+        this->vida = 0;
+    }
+}
+
 void Atirador::update()
 {
     this->updateAttack();
@@ -98,4 +107,9 @@ void Atirador::update()
 void Atirador::render(RenderTarget* target)
 {
     target->draw(this->sprite);
+}
+
+int Atirador::getVida()
+{
+    return this->vida;
 }

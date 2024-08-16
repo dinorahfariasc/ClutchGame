@@ -13,7 +13,7 @@ private:
     float speed;
     int hp;
     int hpMax;
-    int demage;
+    int damage;
     int points;
     sf::Vector2f direction;
 
@@ -31,6 +31,9 @@ public:
     //Funções
     void update(sf::Vector2f atiradorPos);
     void render(sf::RenderTarget *target);
+    void takeDamage(int dano);
+    int getDamage();
+    int getHp();
 };
 
 #endif // INIMIGO_HPP

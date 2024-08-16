@@ -25,6 +25,11 @@ const FloatRect Projetil::getBounds() const
     return this->shape.getGlobalBounds();
 }
 
+int Projetil::getDano()
+{
+    return this->dano;
+}
+
 void Projetil::update()
 {
     //Movementoss

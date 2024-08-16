@@ -1,7 +1,10 @@
 #include "Headers/Jogo.hpp"
 #include "Jogo.hpp"
+#include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
 #include <math.h>
+
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 using namespace std;
@@ -142,8 +145,8 @@ void Jogo::updateInput()
 
         // Criação do projetil com a direção calculada
         this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
-                                              atiradorPos.x + 55.f - 2.5f, //posição do projetil
-                                              atiradorPos.y + 22.f, 
+                                              atiradorPos.x , //posição do projetil
+                                              atiradorPos.y , 
                                               direction.x, direction.y, 5.f));
     }
 }
@@ -170,7 +173,7 @@ void Jogo::updateProjetil()
 
 }
 
-void Jogo::updateInimigo()
+void Jogo::updateInimigoeCombate()
 {
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
@@ -205,14 +208,39 @@ void Jogo::updateInimigo()
         sf::Vector2f atiradorPos = this->atirador->getPos();
         this->inimigos[i]->update(atiradorPos);
 
-        // Remove os inimigos fora da tela (ajuste se necessário)
-        if (this->inimigos[i]->getBounds().top > this->window->getSize().y ||
-            this->inimigos[i]->getBounds().left > this->window->getSize().x ||
-            this->inimigos[i]->getBounds().left + this->inimigos[i]->getBounds().width < 0 ||
-            this->inimigos[i]->getBounds().top + this->inimigos[i]->getBounds().height < 0)
+        // Checar se o projetil do atirador atinge o inimigo e diminuir a vida do inimigo
+        for (size_t k = 0; k < this->projetil.size(); ++k)
+        {
+            if (this->projetil[k]->getBounds().intersects(this->inimigos[i]->getBounds()))
+            {
+                this->inimigos[i]->takeDamage(this->projetil[k]->getDano());
+                this->projetil.erase(this->projetil.begin() + k);
+                
+                // se a vida do inimigo for 0, apague o inimigo
+                if (this->inimigos[i]->getHp() <= 0)
+                {
+                    this->inimigos.erase(this->inimigos.begin() + i);
+                }
+
+            }
+        }
+        
+        // se o inimigo atingir o atirador, apague o inimigo e diminua a vida do atirador
+        if (this->inimigos[i]->getBounds().intersects(this->atirador->getBounds()))
         {
             this->inimigos.erase(this->inimigos.begin() + i);
+            this->atirador->takeDamage(this->inimigos[i]->getDamage());
+            // matar o jogador
+            if (this->atirador->getVida() <= 0)
+            {
+                this->window->close();
+                // Game Over
+                GameOver gameover;
+                gameover.runGameOver();
+                
+            }
         }
+
     }
 }
 
@@ -231,7 +259,7 @@ void Jogo::update()
 
    this->updateProjetil();
 
-   this->updateInimigo();
+   this->updateInimigoeCombate();
 }
 
 

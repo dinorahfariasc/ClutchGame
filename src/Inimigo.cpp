@@ -16,7 +16,7 @@ void Inimigo::initVariable()
    this->speed    = 5.f;
    this->hpMax    = 10;
    this->hp       = 0;
-   this->demage   = 1;
+   this->damage   = 1;
    this->points   = 5;
 }
 
@@ -55,4 +55,25 @@ void Inimigo::update(sf::Vector2f atiradorPos)
 void Inimigo::render(sf::RenderTarget * target)
 {
     target->draw(this->shape);
+}
+
+void Inimigo::takeDamage(int dano)
+{
+    this->hp -= dano;
+    if (this->hp <= 0)
+    {
+        this->hp = 0;
+    }
+}
+
+
+int Inimigo::getDamage()
+{
+    return this->damage;
+}
+
+
+int Inimigo::getHp()
+{
+    return this->hp;
 }
