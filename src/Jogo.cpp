@@ -1,5 +1,5 @@
+
 #include "Headers/Jogo.hpp"
-#include "Jogo.hpp"
 #include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
 #include <math.h>

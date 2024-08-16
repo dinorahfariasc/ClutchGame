@@ -59,7 +59,7 @@ void Inimigo::atirar(Vector2f atiradorPos)
         Vector2f direction = dir / magnitude;
 
         // Cria o projétil
-        this->projeteis.push_back(new ProjetilInimigo(this->texture, 
+        this->projeteis.push_back(new ProjetInimigo(this->texture, 
                                                      this->shape.getPosition().x, 
                                                      this->shape.getPosition().y, 
                                                      direction.x, direction.y, 

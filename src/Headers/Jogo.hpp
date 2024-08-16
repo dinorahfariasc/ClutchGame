@@ -12,6 +12,7 @@
 using namespace sf;
 using namespace std;
 
+
 class Jogo
 {
     private:
