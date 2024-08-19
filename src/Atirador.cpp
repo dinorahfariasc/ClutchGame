@@ -21,11 +21,12 @@ void Atirador::initVariables()
      this->movementSpeed = 5.f;
      this->attackCooldownMax = 10.f;
      this->attackCooldown = this->attackCooldownMax;
+     this->vida = 5;
 }
 
 void Atirador::initTexture()
 {
-    if (!this->texture.loadFromFile("Assests/Personagem/handgun.png"))
+    if (!this->texture.loadFromFile("Assests/Personagem/player.png"))
     {
         cout << "ERRO: Nao foi possivel carregar a textura do atirador" << endl;
     }
@@ -87,9 +88,8 @@ void Atirador::updateRotation(const Vector2f &mousePos)
 
     float angle = std::atan2(deltaY, deltaX) * 180.f / 3.14159f;
 
-    this->sprite.setRotation(angle + 90.f); //+90.f para alinhar o sprite corretamente 
+    this->sprite.setRotation(angle - 75.f ); 
 }
-
 void Atirador::takeDamage(int dano)
 {
     this->vida -= dano;

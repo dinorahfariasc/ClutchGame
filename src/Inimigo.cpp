@@ -13,7 +13,7 @@ void Inimigo::initShape()
 void Inimigo::initVariable()
 {
    this->type     = 0;
-   this->speed    = 5.f;
+   this->speed    = 2.f;
    this->hpMax    = 10;
    this->hp       = 0;
    this->damage   = 1;

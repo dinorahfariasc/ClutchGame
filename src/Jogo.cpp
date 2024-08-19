@@ -2,6 +2,7 @@
 #include "Headers/Jogo.hpp"
 #include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
+#include "Headers/Base.hpp"
 #include <math.h>
 
 #include <SFML/Graphics.hpp>
@@ -21,7 +22,7 @@ void Jogo::initWindow(){
 void Jogo::initTextures()
 {
     this->texture["PROJETIL"] = new Texture();
-    this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
+    this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/bullet.png");
 
     this->texture["PROJETIL2"] = new Texture();
     this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/projetil2.png");
@@ -54,14 +55,15 @@ Jogo::Jogo()
     this->initAtirador();
     this->initInimigo();
     this->background.setTexture(*this->texture["BACKGROUND"]);
-   
+    this->base = new Base(); // Inicializa a base
 }
 
 
 Jogo::~Jogo()
 {
-     delete this->window;
+    delete this->window;
     delete this->atirador;
+    delete this->base; 
 
     // Delete textures
     for (auto& texturePair : this->texture)
@@ -253,6 +255,22 @@ void Jogo::updateInimigoeCombate()
             }
         }
 
+        // se o inimigo colidir com a base , apague o inimigo e diminua a vida da base
+        if (this->inimigos[i]->getBounds().intersects(this->base->getBounds()))
+        {
+            delete this->inimigos[i];
+            this->inimigos.erase(this->inimigos.begin() + i);
+            this->base->takeDamage(1);
+            // matar a base
+            if (this->base->getVida() <= 0)
+            {
+                this->window->close();
+                // Game Over
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
+
     }
 }
 
@@ -284,6 +302,8 @@ void Jogo::render()
 
     // Renderizar todas as coisas
     this->atirador->render(this->window);
+
+    this->window->draw(this->base->getSprite());
 
     for (auto* projetil : this->projetil)
     {

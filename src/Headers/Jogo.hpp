@@ -8,6 +8,7 @@
 #include <Atirador.hpp>
 #include "Projetil.hpp"
 #include "Inimigo.hpp"
+#include "Base.hpp"
 
 using namespace sf;
 using namespace std;
@@ -27,6 +28,9 @@ class Jogo
 
     //Atirador
     Atirador* atirador;
+
+    //Base 
+    Base* base;
 
     //Inimigo
     float spawnTimer;
