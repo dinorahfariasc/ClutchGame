@@ -42,7 +42,8 @@ void Jogo::initAtirador()
 
 void Jogo::initStatus()
 {
-    this->status = new Status();
+    this->status = new Status(this->atirador->getVida(), this->base->getVida());
+;
 }
 void Jogo::initInimigo()
 {

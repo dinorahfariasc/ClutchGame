@@ -11,13 +11,15 @@ private:
     sf::Font font;
     sf::Text vidaAtiradorText;
     sf::Text vidaBaseText;
+    float vidaInicialAtirador;
+    float vidaInicialBase;
 
     void initFont();
 
 public:
-    Status();
+    Status(float vidaInicialAtirador, float vidaInicialBase);
     ~Status();
-
+    
     void update(const Atirador& atirador, const Base& base);
     void render(sf::RenderTarget* target);
 };
