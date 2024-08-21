@@ -212,11 +212,10 @@ void Jogo::updateInimigoeCombate()
         }
 
         // Adiciona o inimigo à lista com a nova posição
-        this->inimigos.push_back(new Inimigo(x, y, this->texture["PROJETIL2"],this->atirador->getPos()));
+        this->inimigos.push_back(new Inimigo(x, y, this->texture["PROJETIL2"], this->atirador->getPos()));
         this->spawnTimer = 0.f;
     }
 
-    // todo remover inimigos apenas se forem atingindos ! 
     for (size_t i = 0; i < this->inimigos.size(); ++i)
     {
         this->inimigos[i]->update(this->atirador->getPos());
@@ -234,45 +233,54 @@ void Jogo::updateInimigoeCombate()
                 {
                     this->inimigos.erase(this->inimigos.begin() + i);
                 }
-
             }
         }
-        
-        // se o inimigo atingir o atirador, apague o inimigo e diminua a vida do atirador
+
+        // Se o inimigo atingir o atirador, apague o inimigo e diminua a vida do atirador
         if (this->inimigos[i]->getBounds().intersects(this->atirador->getBounds()))
         {
             delete this->inimigos[i];
             this->inimigos.erase(this->inimigos.begin() + i);
             this->atirador->takeDamage(this->inimigos[i]->getDamage());
-            // matar o jogador
+            // Matar o jogador
             if (this->atirador->getVida() <= 0)
             {
                 this->window->close();
-                // Game Over
                 GameOver gameover;
                 gameover.runGameOver();
-                
             }
         }
 
-        // se o inimigo colidir com a base , apague o inimigo e diminua a vida da base
+        // Verifica se os projéteis do inimigo atingem o atirador
+        if (this->inimigos[i]->checkProjetilHit(this->atirador->getBounds()))
+        {
+            this->atirador->takeDamage(1); // Ajuste o valor de dano conforme necessário
+
+            if (this->atirador->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
+
+        // Se o inimigo colidir com a base, apague o inimigo e diminua a vida da base
         if (this->inimigos[i]->getBounds().intersects(this->base->getBounds()))
         {
             delete this->inimigos[i];
             this->inimigos.erase(this->inimigos.begin() + i);
             this->base->takeDamage(1);
-            // matar a base
+            // Matar a base
             if (this->base->getVida() <= 0)
             {
                 this->window->close();
-                // Game Over
                 GameOver gameover;
                 gameover.runGameOver();
             }
         }
-
     }
 }
+
 
 
 
@@ -312,7 +320,8 @@ void Jogo::render()
 
     for (auto* inimigo : this->inimigos)
     {
-        inimigo->render(this->window);
+        inimigo->render(this->window); // Renderiza o inimigo
+        inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
 
     this->window->display();

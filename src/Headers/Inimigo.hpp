@@ -33,9 +33,11 @@ public:
     const sf::FloatRect getBounds() const;
     void update(sf::Vector2f atiradorPos);
     void render(sf::RenderTarget *target);
+    void renderProjeteis(sf::RenderTarget *target);
     void takeDamage(int dano);
     int getDamage();
     int getHp();
+    bool checkProjetilHit(sf::FloatRect atiradorBounds);
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "Headers/Inimigo.hpp"
 #include <cmath>
+#include "Inimigo.hpp"
 
 using namespace sf;
 
@@ -18,6 +19,9 @@ void Inimigo::initVariable()
    this->hp       = 0;
    this->damage   = 1;
    this->points   = 5;
+   this->atirarTimer = 0.f;
+   this->atirarTimerMax = 50.f; // Ajuste conforme necessário
+   
 }
 
 
@@ -49,7 +53,7 @@ const sf::FloatRect Inimigo::getBounds() const
 
 void Inimigo::atirar(Vector2f atiradorPos)
 {
-    this->atirarTimer += 1.f; // Incrementa o timer (ajuste conforme necessário)
+    this->atirarTimer += 1.f; // Incrementa o timer do inimigo
 
     if (this->atirarTimer >= this->atirarTimerMax)
     {
@@ -58,16 +62,17 @@ void Inimigo::atirar(Vector2f atiradorPos)
         float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
         Vector2f direction = dir / magnitude;
 
-        // Cria o projétil
+        // Cria o projétil inimigo
         this->projeteis.push_back(new ProjetInimigo(this->texture, 
-                                                     this->shape.getPosition().x, 
-                                                     this->shape.getPosition().y, 
-                                                     direction.x, direction.y, 
-                                                     5.f)); // Ajuste a velocidade conforme necessário
+                                                    this->shape.getPosition().x, 
+                                                    this->shape.getPosition().y, 
+                                                    direction.x, direction.y, 
+                                                    5.f)); // Ajuste a velocidade conforme necessário
 
-        this->atirarTimer = 0.f; // Reinicia o timer
+        this->atirarTimer = 0.f; // Reinicia o timer do inimigo
     }
 }
+
 
 void Inimigo::update(Vector2f atiradorPos)
 {
@@ -84,27 +89,35 @@ void Inimigo::update(Vector2f atiradorPos)
     this->updateProjetil();
 }
 
-void Inimigo::updateProjetil()
+void Inimigo::updateProjetil() 
 {
     unsigned counter = 0;
-    for (auto* projetil : this->projeteis)
+    for (auto* projetil : this->projeteis) 
     {
         projetil->update();
 
-        if (projetil->getBounds().top + projetil->getBounds().height < 0.f)
+        if (projetil->getBounds().top + projetil->getBounds().height < 0.f) 
         {
             delete projetil;
             this->projeteis.erase(this->projeteis.begin() + counter);
             --counter;
         }
-
         ++counter;
     }
 }
 
+
 void Inimigo::render(sf::RenderTarget* target)
 {
     target->draw(this->shape);
+}
+
+void Inimigo::renderProjeteis(sf::RenderTarget* target)
+{
+    for (auto* projetil : this->projeteis)
+    {
+        projetil->render(target);
+    }
 }
 
 void Inimigo::takeDamage(int dano)
@@ -126,4 +139,20 @@ int Inimigo::getDamage()
 int Inimigo::getHp()
 {
     return this->hp;
+}
+
+bool Inimigo::checkProjetilHit(sf::FloatRect atiradorBounds) 
+{
+    unsigned counter = 0;
+    for (auto* projetil : this->projeteis) 
+    {
+        if (projetil->getBounds().intersects(atiradorBounds)) 
+        {
+            delete projetil;
+            this->projeteis.erase(this->projeteis.begin() + counter);
+            return true; // Projétil atingiu o atirador
+        }
+        ++counter;
+    }
+    return false;
 }
