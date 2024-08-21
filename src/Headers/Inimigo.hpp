@@ -2,7 +2,7 @@
 #define INIMIGO_HPP
 
 #include <SFML/Graphics.hpp>
-#include "C:/Users/dina/Desktop/TesteSTU/Shoothemup-main/src/Headers/ProjetInimigo.hpp"
+#include "ProjetInimigo.hpp"
 #include <vector>
 
 class Inimigo

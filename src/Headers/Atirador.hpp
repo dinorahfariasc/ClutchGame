@@ -36,7 +36,7 @@ class Atirador{
         void takeDamage(int dano);
         void update();
         void render(RenderTarget* target);
-        int getVida();
+        int getVida() const;
 
 };
 

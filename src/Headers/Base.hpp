@@ -28,7 +28,7 @@ class Base{
         // --------------------------------- FUNCOES Publicas------------------------------------
         void takeDamage(int dano);
         void render(RenderTarget* target);
-        int getVida();
+        int getVida() const;
         Sprite& getSprite();
 };
 

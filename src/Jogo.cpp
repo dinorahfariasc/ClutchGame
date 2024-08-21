@@ -3,9 +3,11 @@
 #include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
 #include "Headers/Base.hpp"
+#include "Headers/Status.hpp"
 #include <math.h>
 
 #include <SFML/Graphics.hpp>
+#include "Jogo.hpp"
 
 using namespace sf;
 using namespace std;
@@ -25,7 +27,7 @@ void Jogo::initTextures()
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/bullet.png");
 
     this->texture["PROJETIL2"] = new Texture();
-    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/projetil2.png");
+    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/bullet_critical.png");
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
@@ -38,6 +40,10 @@ void Jogo::initAtirador()
 
 }
 
+void Jogo::initStatus()
+{
+    this->status = new Status();
+}
 void Jogo::initInimigo()
 {
     this->spawnTimerMax = 50.f;
@@ -56,6 +62,7 @@ Jogo::Jogo()
     this->initInimigo();
     this->background.setTexture(*this->texture["BACKGROUND"]);
     this->base = new Base(); // Inicializa a base
+    this->initStatus();
 }
 
 
@@ -63,7 +70,7 @@ Jogo::~Jogo()
 {
     delete this->window;
     delete this->atirador;
-    delete this->base; 
+    delete this->base;  
 
     // Delete textures
     for (auto& texturePair : this->texture)
@@ -84,6 +91,7 @@ Jogo::~Jogo()
         delete inimigo;
     }
     this->inimigos.clear(); // Limpa o vetor após deletar
+    delete this->status; //agr
 }
 
 
@@ -299,6 +307,8 @@ void Jogo::update()
    this->updateProjetil();
 
    this->updateInimigoeCombate();
+
+   this->status->update(*this->atirador, *this->base);
 }
 
 
@@ -324,7 +334,10 @@ void Jogo::render()
         inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
 
+    this->status->render(this->window);
+
     this->window->display();
+
 }
 
 

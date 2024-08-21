@@ -109,7 +109,7 @@ void Atirador::render(RenderTarget* target)
     target->draw(this->sprite);
 }
 
-int Atirador::getVida()
+int Atirador::getVida() const
 {
     return this->vida;
 }

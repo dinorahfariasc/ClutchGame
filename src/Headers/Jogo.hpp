@@ -9,6 +9,7 @@
 #include "Projetil.hpp"
 #include "Inimigo.hpp"
 #include "Base.hpp"
+#include "Status.hpp"
 
 using namespace sf;
 using namespace std;
@@ -37,11 +38,14 @@ class Jogo
     float spawnTimerMax;
     vector<Inimigo*> inimigos;
 
+    Status* status;
+
     // --------------------------------- FUNCOES PRIVADAS ------------------------------------
     void initWindow();
     void initTextures();
     void initInimigo();
     void initAtirador();
+    void initStatus();
     
 
 
