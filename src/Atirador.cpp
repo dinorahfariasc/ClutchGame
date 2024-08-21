@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Atirador.hpp"
+#include <math.h>
 
 using namespace sf;
 using namespace std;
@@ -20,11 +21,12 @@ void Atirador::initVariables()
      this->movementSpeed = 5.f;
      this->attackCooldownMax = 10.f;
      this->attackCooldown = this->attackCooldownMax;
+     this->vida = 5;
 }
 
 void Atirador::initTexture()
 {
-    if (!this->texture.loadFromFile("Assests/Personagem/handgun.png"))
+    if (!this->texture.loadFromFile("Assests/Personagem/player.png"))
     {
         cout << "ERRO: Nao foi possivel carregar a textura do atirador" << endl;
     }
@@ -77,6 +79,26 @@ void Atirador::updateAttack()
         this->attackCooldown += 0.5f;
 }
 
+void Atirador::updateRotation(const Vector2f &mousePos)
+{
+    Vector2f atiradorPos = this->sprite.getPosition();
+
+    float deltaX = mousePos.x - atiradorPos.x;
+    float deltaY = mousePos.y - atiradorPos.y;
+
+    float angle = std::atan2(deltaY, deltaX) * 180.f / 3.14159f;
+
+    this->sprite.setRotation(angle - 75.f ); 
+}
+void Atirador::takeDamage(int dano)
+{
+    this->vida -= dano;
+    if (this->vida <= 0)
+    {
+        this->vida = 0;
+    }
+}
+
 void Atirador::update()
 {
     this->updateAttack();
@@ -85,4 +107,9 @@ void Atirador::update()
 void Atirador::render(RenderTarget* target)
 {
     target->draw(this->sprite);
+}
+
+int Atirador::getVida()
+{
+    return this->vida;
 }

@@ -11,7 +11,7 @@ class Atirador{
         Sprite sprite;
         Texture texture;
         float movementSpeed;
-
+        int vida;
         float attackCooldown;
         float attackCooldownMax;
 
@@ -31,11 +31,12 @@ class Atirador{
         // --------------------------------- FUNCOES Publicas------------------------------------
         void move(const float dirX, const float dirY);
         bool canAttack();
-
         void updateAttack();
+        void updateRotation(const Vector2f& mousePos); //atualizar a rotação
+        void takeDamage(int dano);
         void update();
         void render(RenderTarget* target);
-
+        int getVida();
 
 };
 

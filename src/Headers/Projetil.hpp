@@ -10,10 +10,9 @@ class Projetil
 {
 private:
     Sprite shape;
-
-
     Vector2f direction;
     float movementSpeed;
+    int dano;
 
 
 public:
@@ -23,6 +22,8 @@ public:
 
     //Accessor
     const FloatRect getBounds() const;
+
+    int getDano();
 
     void update();
     void render(RenderTarget* target);

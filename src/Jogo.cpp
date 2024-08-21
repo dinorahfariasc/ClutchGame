@@ -1,7 +1,11 @@
+
 #include "Headers/Jogo.hpp"
-#include "Jogo.hpp"
+#include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
+#include "Headers/Base.hpp"
 #include <math.h>
+
+#include <SFML/Graphics.hpp>
 
 using namespace sf;
 using namespace std;
@@ -18,7 +22,10 @@ void Jogo::initWindow(){
 void Jogo::initTextures()
 {
     this->texture["PROJETIL"] = new Texture();
-    this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/projetil.png");
+    this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/bullet.png");
+
+    this->texture["PROJETIL2"] = new Texture();
+    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/projetil2.png");
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
@@ -48,7 +55,7 @@ Jogo::Jogo()
     this->initAtirador();
     this->initInimigo();
     this->background.setTexture(*this->texture["BACKGROUND"]);
-   
+    this->base = new Base(); // Inicializa a base
 }
 
 
@@ -56,22 +63,27 @@ Jogo::~Jogo()
 {
     delete this->window;
     delete this->atirador;
+    delete this->base; 
 
-    //Delete textures
-    for (auto &i : this->texture)
+    // Delete textures
+    for (auto& texturePair : this->texture)
     {
-        delete i.second;
+        delete texturePair.second;
     }
-    //Delete Projeteis
-    for (auto *i : this->projetil)
+
+    // Delete Projeteis
+    for (auto* projetil : this->projetil)
     {
-        delete i;
+        delete projetil;
     }
-    //Delete Inimigos
-    for (auto *i : this->inimigos)
+    this->projetil.clear(); // Limpa o vetor após deletar
+
+    // Delete Inimigos
+    for (auto* inimigo : this->inimigos)
     {
-        delete i;
+        delete inimigo;
     }
+    this->inimigos.clear(); // Limpa o vetor após deletar
 }
 
 
@@ -142,8 +154,8 @@ void Jogo::updateInput()
 
         // Criação do projetil com a direção calculada
         this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
-                                              atiradorPos.x + 55.f - 2.5f, //posição do projetil
-                                              atiradorPos.y + 22.f, 
+                                              atiradorPos.x , //posição do projetil
+                                              atiradorPos.y , 
                                               direction.x, direction.y, 5.f));
     }
 }
@@ -170,51 +182,106 @@ void Jogo::updateProjetil()
 
 }
 
-void Jogo::updateInimigo()
+void Jogo::updateInimigoeCombate()
 {
     this->spawnTimer += 0.5f;
     if (this->spawnTimer >= this->spawnTimerMax)
     {
-        // Gerar uma posição aleatória na borda
-        int border = rand() % 4;
-        float posX, posY;
-        if (border == 0) { // Topo
-            posX = rand() % this->window->getSize().x;
-            posY = 0.f;
-        } else if (border == 1) { // Inferior
-            posX = rand() % this->window->getSize().x;
-            posY = this->window->getSize().y - 20.f;
-        } else if (border == 2) { // Esquerda
-            posX = 0.f;
-            posY = rand() % this->window->getSize().y;
-        } else { // Direita
-            posX = this->window->getSize().x - 20.f;
-            posY = rand() % this->window->getSize().y;
+        // Gera uma posição aleatória para o inimigo em uma das quatro bordas
+        float x = 0.f;
+        float y = 0.f;
+        int edge = rand() % 4; // 0: superior, 1: inferior, 2: esquerda, 3: direita
+        switch (edge)
+        {
+            case 0: // Superior
+                x = rand() % this->window->getSize().x;
+                y = -50.f; // Posição acima da tela
+                break;
+            case 1: // Inferior
+                x = rand() % this->window->getSize().x;
+                y = this->window->getSize().y + 50.f; // Posição abaixo da tela
+                break;
+            case 2: // Esquerda
+                x = -50.f; // Posição à esquerda da tela
+                y = rand() % this->window->getSize().y;
+                break;
+            case 3: // Direita
+                x = this->window->getSize().x + 50.f; // Posição à direita da tela
+                y = rand() % this->window->getSize().y;
+                break;
         }
 
-        // Criar inimigo na borda com a posição inicial do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
-        this->inimigos.push_back(new Inimigo(posX, posY, atiradorPos));
-
+        // Adiciona o inimigo à lista com a nova posição
+        this->inimigos.push_back(new Inimigo(x, y, this->texture["PROJETIL2"], this->atirador->getPos()));
         this->spawnTimer = 0.f;
     }
-    
-    for (int i = 0; i < this->inimigos.size(); ++i)
-    {
-        // Atualizar a direção do inimigo para a posição atual do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
-        this->inimigos[i]->update(atiradorPos);
 
-        // Remove os inimigos fora da tela (ajuste se necessário)
-        if (this->inimigos[i]->getBounds().top > this->window->getSize().y ||
-            this->inimigos[i]->getBounds().left > this->window->getSize().x ||
-            this->inimigos[i]->getBounds().left + this->inimigos[i]->getBounds().width < 0 ||
-            this->inimigos[i]->getBounds().top + this->inimigos[i]->getBounds().height < 0)
+    for (size_t i = 0; i < this->inimigos.size(); ++i)
+    {
+        this->inimigos[i]->update(this->atirador->getPos());
+
+        // Checar se o projetil do atirador atinge o inimigo e diminuir a vida do inimigo
+        for (size_t k = 0; k < this->projetil.size(); ++k)
         {
+            if (this->projetil[k]->getBounds().intersects(this->inimigos[i]->getBounds()))
+            {
+                this->inimigos[i]->takeDamage(this->projetil[k]->getDano());
+                this->projetil.erase(this->projetil.begin() + k);
+                
+                // se a vida do inimigo for 0, apague o inimigo
+                if (this->inimigos[i]->getHp() <= 0)
+                {
+                    this->inimigos.erase(this->inimigos.begin() + i);
+                }
+            }
+        }
+
+        // Se o inimigo atingir o atirador, apague o inimigo e diminua a vida do atirador
+        if (this->inimigos[i]->getBounds().intersects(this->atirador->getBounds()))
+        {
+            delete this->inimigos[i];
             this->inimigos.erase(this->inimigos.begin() + i);
+            this->atirador->takeDamage(this->inimigos[i]->getDamage());
+            // Matar o jogador
+            if (this->atirador->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
+
+        // Verifica se os projéteis do inimigo atingem o atirador
+        if (this->inimigos[i]->checkProjetilHit(this->atirador->getBounds()))
+        {
+            this->atirador->takeDamage(1); // Ajuste o valor de dano conforme necessário
+
+            if (this->atirador->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
+
+        // Se o inimigo colidir com a base, apague o inimigo e diminua a vida da base
+        if (this->inimigos[i]->getBounds().intersects(this->base->getBounds()))
+        {
+            delete this->inimigos[i];
+            this->inimigos.erase(this->inimigos.begin() + i);
+            this->base->takeDamage(1);
+            // Matar a base
+            if (this->base->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
         }
     }
 }
+
+
 
 
 void Jogo::update()
@@ -223,11 +290,15 @@ void Jogo::update()
 
    this->updateInput();
 
+   Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+
+   this->atirador->updateRotation(mousePos);
+
    this->atirador->update();
 
    this->updateProjetil();
 
-   this->updateInimigo();
+   this->updateInimigoeCombate();
 }
 
 
@@ -237,23 +308,23 @@ void Jogo::render()
     
     this->window->draw(this->background);
 
-    // desenhe todas as coisas
+    // Renderizar todas as coisas
     this->atirador->render(this->window);
 
-    for (auto *projetil : this->projetil)
+    this->window->draw(this->base->getSprite());
+
+    for (auto* projetil : this->projetil)
     {
         projetil->render(this->window);
     }
 
-    for (auto *inimigo : this->inimigos)
+    for (auto* inimigo : this->inimigos)
     {
-        inimigo->render(this->window);
+        inimigo->render(this->window); // Renderiza o inimigo
+        inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
 
-
     this->window->display();
-
-
 }
 
 
