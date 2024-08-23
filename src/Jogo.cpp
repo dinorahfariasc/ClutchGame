@@ -3,9 +3,11 @@
 #include "Headers/GameOver.hpp"
 #include "Headers/Inimigo.hpp"
 #include "Headers/Base.hpp"
+#include "Headers/Status.hpp"
 #include <math.h>
 
 #include <SFML/Graphics.hpp>
+#include "Jogo.hpp"
 
 using namespace sf;
 using namespace std;
@@ -25,7 +27,7 @@ void Jogo::initTextures()
     this->texture["PROJETIL"]->loadFromFile("Assests/Projetil/bullet.png");
 
     this->texture["PROJETIL2"] = new Texture();
-    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/projetil2.png");
+    this->texture["PROJETIL2"]->loadFromFile("Assests/Projetil/bullet_critical.png");
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
@@ -38,6 +40,11 @@ void Jogo::initAtirador()
 
 }
 
+void Jogo::initStatus()
+{
+    this->status = new Status(this->atirador->getVida(), this->base->getVida(), this->atirador->getProjeteisDisponiveis());
+
+}
 void Jogo::initInimigo()
 {
     this->spawnTimerMax = 50.f;
@@ -56,6 +63,7 @@ Jogo::Jogo()
     this->initInimigo();
     this->background.setTexture(*this->texture["BACKGROUND"]);
     this->base = new Base(); // Inicializa a base
+    this->initStatus();
 }
 
 
@@ -63,7 +71,7 @@ Jogo::~Jogo()
 {
     delete this->window;
     delete this->atirador;
-    delete this->base; 
+    delete this->base;  
 
     // Delete textures
     for (auto& texturePair : this->texture)
@@ -84,6 +92,7 @@ Jogo::~Jogo()
         delete inimigo;
     }
     this->inimigos.clear(); // Limpa o vetor após deletar
+    delete this->status; //agr
 }
 
 
@@ -134,29 +143,33 @@ void Jogo::updateInput()
         this->atirador->move(0.f, 1.f);
     }
 
-
-
     // Atirar Projetil
     if (Mouse::isButtonPressed(Mouse::Left) && this->atirador->canAttack())
     {
-        // Posição do mouse
-        sf::Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+        this->atirador->dispararProjetil(); // Reduz o número de projéteis disponíveis
 
-        // Posição do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
+        // Verifique se ainda há projéteis disponíveis antes de disparar
+        if (this->atirador->getProjeteisDisponiveis() > 0)
+        {
+            // Posição do mouse
+            sf::Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
 
-        // Direção do projetil
-        sf::Vector2f dir = mousePos - atiradorPos;
+            // Posição do atirador
+            sf::Vector2f atiradorPos = this->atirador->getPos();
 
-        // Normalizar a direção
-        float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
-        sf::Vector2f direction = dir / magnitude;
+            // Direção do projetil
+            sf::Vector2f dir = mousePos - atiradorPos;
 
-        // Criação do projetil com a direção calculada
-        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
-                                              atiradorPos.x , //posição do projetil
-                                              atiradorPos.y , 
-                                              direction.x, direction.y, 5.f));
+            // Normalizar a direção
+            float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
+            sf::Vector2f direction = dir / magnitude;
+
+            // Criação do projetil com a direção calculada
+            this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
+                                                  atiradorPos.x , //posição do projetil
+                                                  atiradorPos.y , 
+                                                  direction.x, direction.y, 5.f));
+        }
     }
 }
 
@@ -278,9 +291,21 @@ void Jogo::updateInimigoeCombate()
                 gameover.runGameOver();
             }
         }
+
+        // Verifica se os projéteis do inimigo atingem a base
+        if (this->inimigos[i]->checkProjetilHit(this->base->getBounds()))
+        {
+            this->base->takeDamage(1); // Ajuste o valor de dano conforme necessário
+
+            if (this->base->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
     }
 }
-
 
 
 
@@ -299,6 +324,8 @@ void Jogo::update()
    this->updateProjetil();
 
    this->updateInimigoeCombate();
+
+   this->status->update(*this->atirador, *this->base);
 }
 
 
@@ -324,7 +351,10 @@ void Jogo::render()
         inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
 
+    this->status->render(this->window);
+
     this->window->display();
+
 }
 
 

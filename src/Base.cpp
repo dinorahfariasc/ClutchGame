@@ -15,7 +15,7 @@ Base::Base(){
 
 void Base::initVariables()
 {
-    this->vida = 5;
+    this->vida = 100;
 }
 
 
@@ -59,7 +59,7 @@ void Base::render(RenderTarget* target)
     target->draw(this->sprite);
 }
 
-int Base::getVida()
+int Base::getVida() const
 {
     return this->vida;
 }

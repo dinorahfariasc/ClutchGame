@@ -55,7 +55,7 @@ void Menu::setValues(){
         texts[i].setString(options[i]);
         texts[i].setCharacterSize(sizes[i]);
         texts[i].setFillColor(Color::White);
-        texts[i].setOutlineColor(Color::Black);
+        texts[i].setOutlineColor(Color::Blue);
         texts[i].setPosition(coords[i]);
     }
     texts[1].setOutlineThickness(4);

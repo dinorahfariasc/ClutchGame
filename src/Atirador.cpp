@@ -14,14 +14,16 @@ Atirador::Atirador()
     this->initVariables();
     this->initTexture();
     this->initSprite();
+    
 }
 
 void Atirador::initVariables()
 {
-     this->movementSpeed = 5.f;
-     this->attackCooldownMax = 10.f;
-     this->attackCooldown = this->attackCooldownMax;
-     this->vida = 5;
+    this->movementSpeed = 5.f;
+    this->attackCooldownMax = 10.f;
+    this->attackCooldown = this->attackCooldownMax;
+    this->vida = 20;
+    this->projeteisDisponiveis = 20;
 }
 
 void Atirador::initTexture()
@@ -109,7 +111,26 @@ void Atirador::render(RenderTarget* target)
     target->draw(this->sprite);
 }
 
-int Atirador::getVida()
+int Atirador::getVida() const
 {
     return this->vida;
+}
+
+void Atirador::dispararProjetil()
+{
+    if (this->projeteisDisponiveis > 0)
+    {
+        this->projeteisDisponiveis--; 
+        
+    }
+    else
+    {
+       //jogador tentar disparar sem projéteis
+        std::cout << "Sem projéteis!" << std::endl;
+    }
+}
+
+int Atirador::getProjeteisDisponiveis() const
+{
+    return this->projeteisDisponiveis;
 }
