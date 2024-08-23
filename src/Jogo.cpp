@@ -287,9 +287,21 @@ void Jogo::updateInimigoeCombate()
                 gameover.runGameOver();
             }
         }
+
+        // Verifica se os projéteis do inimigo atingem a base
+        if (this->inimigos[i]->checkProjetilHit(this->base->getBounds()))
+        {
+            this->base->takeDamage(1); // Ajuste o valor de dano conforme necessário
+
+            if (this->base->getVida() <= 0)
+            {
+                this->window->close();
+                GameOver gameover;
+                gameover.runGameOver();
+            }
+        }
     }
 }
-
 
 
 
