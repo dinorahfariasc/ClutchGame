@@ -5,19 +5,22 @@
 #include "Atirador.hpp"
 #include "Base.hpp"
 
+
 class Status
 {
 private:
     sf::Font font;
     sf::Text vidaAtiradorText;
     sf::Text vidaBaseText;
+    sf::Text projeteisDisponiveisText;
     float vidaInicialAtirador;
     float vidaInicialBase;
+    float projeteisDisponiveis;
 
     void initFont();
 
 public:
-    Status(float vidaInicialAtirador, float vidaInicialBase);
+    Status(float vidaInicialAtirador, float vidaInicialBase, float projeteisDisponiveis);
     ~Status();
     
     void update(const Atirador& atirador, const Base& base);

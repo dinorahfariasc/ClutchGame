@@ -15,7 +15,7 @@ Base::Base(){
 
 void Base::initVariables()
 {
-    this->vida = 5;
+    this->vida = 100;
 }
 
 

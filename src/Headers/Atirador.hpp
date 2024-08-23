@@ -14,6 +14,7 @@ class Atirador{
         int vida;
         float attackCooldown;
         float attackCooldownMax;
+        int projeteisDisponiveis;
 
         // --------------------------------- FUNCOES PRIVADAS ------------------------------------
         void initVariables();
@@ -37,6 +38,8 @@ class Atirador{
         void update();
         void render(RenderTarget* target);
         int getVida() const;
+        void dispararProjetil(); // Método para disparar projetil
+        int getProjeteisDisponiveis() const; // Método para obter a quantidade de projéteis disponíveis
 
 };
 

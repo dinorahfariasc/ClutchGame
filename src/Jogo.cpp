@@ -42,8 +42,8 @@ void Jogo::initAtirador()
 
 void Jogo::initStatus()
 {
-    this->status = new Status(this->atirador->getVida(), this->base->getVida());
-;
+    this->status = new Status(this->atirador->getVida(), this->base->getVida(), this->atirador->getProjeteisDisponiveis());
+
 }
 void Jogo::initInimigo()
 {
@@ -143,29 +143,33 @@ void Jogo::updateInput()
         this->atirador->move(0.f, 1.f);
     }
 
-
-
     // Atirar Projetil
     if (Mouse::isButtonPressed(Mouse::Left) && this->atirador->canAttack())
     {
-        // Posição do mouse
-        sf::Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+        this->atirador->dispararProjetil(); // Reduz o número de projéteis disponíveis
 
-        // Posição do atirador
-        sf::Vector2f atiradorPos = this->atirador->getPos();
+        // Verifique se ainda há projéteis disponíveis antes de disparar
+        if (this->atirador->getProjeteisDisponiveis() > 0)
+        {
+            // Posição do mouse
+            sf::Vector2f mousePos = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
 
-        // Direção do projetil
-        sf::Vector2f dir = mousePos - atiradorPos;
+            // Posição do atirador
+            sf::Vector2f atiradorPos = this->atirador->getPos();
 
-        // Normalizar a direção
-        float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
-        sf::Vector2f direction = dir / magnitude;
+            // Direção do projetil
+            sf::Vector2f dir = mousePos - atiradorPos;
 
-        // Criação do projetil com a direção calculada
-        this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
-                                              atiradorPos.x , //posição do projetil
-                                              atiradorPos.y , 
-                                              direction.x, direction.y, 5.f));
+            // Normalizar a direção
+            float magnitude = sqrt(dir.x * dir.x + dir.y * dir.y);
+            sf::Vector2f direction = dir / magnitude;
+
+            // Criação do projetil com a direção calculada
+            this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
+                                                  atiradorPos.x , //posição do projetil
+                                                  atiradorPos.y , 
+                                                  direction.x, direction.y, 5.f));
+        }
     }
 }
 
