@@ -19,7 +19,7 @@ Atirador::Atirador()
 
 void Atirador::initVariables()
 {
-    this->movementSpeed = 8.f;
+    this->movementSpeed = 5.f;
     this->attackCooldownMax = 10.f;
     this->attackCooldown = this->attackCooldownMax;
     this->vida = 20;

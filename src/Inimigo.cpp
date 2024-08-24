@@ -20,7 +20,7 @@ void Inimigo::initVariable()
    this->damage   = 1;
    this->points   = 5;
    this->atirarTimer = 0.f;
-   this->atirarTimerMax = 50.f; // Ajuste conforme necessário
+   this->atirarTimerMax = 80.f; // Ajuste conforme necessário
    
 }
 
