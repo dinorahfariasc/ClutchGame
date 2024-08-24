@@ -1,3 +1,5 @@
+// Arquivo: Atirador.hpp
+
 #ifndef ATIRADOR_HPP
 #define ATIRADOR_HPP
 
@@ -10,6 +12,7 @@ class Atirador{
     private:
         Sprite sprite;
         Texture texture;
+        Sprite reloadItem;  // Sprite para o item de recarga
         float movementSpeed;
         int vida;
         float attackCooldown;
@@ -38,9 +41,12 @@ class Atirador{
         void update();
         void render(RenderTarget* target);
         int getVida() const;
-        void dispararProjetil(); // Método para disparar projetil
-        int getProjeteisDisponiveis() const; // Método para obter a quantidade de projéteis disponíveis
-
+        void dispararProjetil(); 
+        int getProjeteisDisponiveis() const; 
+        void addProjeteis();
+        void addRecarga(sf::Texture *texture);
+        void updateRecarga();
+        void renderRecarga(sf::RenderTarget* target);
 };
 
 #endif // ATIRADOR_HPP

@@ -14,7 +14,7 @@ using namespace std;
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
 void Jogo::initWindow(){
-    this->window = new RenderWindow(VideoMode(800, 800), "Shoothemup", Style::Close | Style::Titlebar);
+    this->window = new RenderWindow(VideoMode(800, 800), "Clutch", Style::Close | Style::Titlebar);
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 
@@ -31,6 +31,9 @@ void Jogo::initTextures()
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
+
+    this->texture["RECARGA"] = new Texture();
+    this->texture["RECARGA"]->loadFromFile("Assests/Projetil/recarga.png");
 }
 
 
@@ -64,6 +67,7 @@ Jogo::Jogo()
     this->background.setTexture(*this->texture["BACKGROUND"]);
     this->base = new Base(); // Inicializa a base
     this->initStatus();
+    int countInimigos = 0;
 }
 
 
@@ -168,7 +172,7 @@ void Jogo::updateInput()
             this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
                                                   atiradorPos.x , //posição do projetil
                                                   atiradorPos.y , 
-                                                  direction.x, direction.y, 5.f));
+                                                  direction.x, direction.y, 8.f));
         }
     }
 }
@@ -245,6 +249,12 @@ void Jogo::updateInimigoeCombate()
                 if (this->inimigos[i]->getHp() <= 0)
                 {
                     this->inimigos.erase(this->inimigos.begin() + i);
+                    countInimigos += 1;
+
+                    if (countInimigos%10 == 0 and countInimigos != 0)
+                    {
+                        this->atirador->addRecarga(this->texture["RECARGA"]);
+                    }
                 }
             }
         }
@@ -323,6 +333,8 @@ void Jogo::update()
 
    this->updateProjetil();
 
+   this->atirador->updateRecarga();
+
    this->updateInimigoeCombate();
 
    this->status->update(*this->atirador, *this->base);
@@ -350,6 +362,8 @@ void Jogo::render()
         inimigo->render(this->window); // Renderiza o inimigo
         inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
+
+    this->atirador->renderRecarga(this->window);
 
     this->status->render(this->window);
 

@@ -134,3 +134,34 @@ int Atirador::getProjeteisDisponiveis() const
 {
     return this->projeteisDisponiveis;
 }
+
+void Atirador::addProjeteis()
+{
+    this->projeteisDisponiveis += 15;
+}
+
+
+void Atirador::addRecarga(sf::Texture *texture)
+{
+    // Inicializa o sprite de recarga se ele não tiver sido inicializado antes
+    this->reloadItem.setTexture(*texture);
+    this->reloadItem.setPosition(sf::Vector2f(400.f, 200.f)); // Posição inicial do sprite
+}
+
+void Atirador::updateRecarga()
+{
+    // Verifica a colisão entre o atirador e o item de recarga
+    if (this->reloadItem.getGlobalBounds().intersects(this->sprite.getGlobalBounds()))
+    {
+        this->addProjeteis(); // Adiciona projéteis ao atirador
+
+        // Remove o item de recarga da tela, movendo-o para fora da área visível
+        this->reloadItem.setPosition(sf::Vector2f(-1000.f, -1000.f));
+    }
+}
+
+void Atirador::renderRecarga(sf::RenderTarget* target)
+{
+    // Renderiza o item de recarga
+    target->draw(this->reloadItem);
+}
