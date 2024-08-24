@@ -14,7 +14,7 @@ using namespace std;
 
 // --------------------------------- FUNCOES PRIVADAS ------------------------------------
 void Jogo::initWindow(){
-    this->window = new RenderWindow(VideoMode(800, 800), "Shoothemup", Style::Close | Style::Titlebar);
+    this->window = new RenderWindow(VideoMode(800, 800), "Clutch", Style::Close | Style::Titlebar);
     this->window->setFramerateLimit(60);
     this->window->setVerticalSyncEnabled(false);
 
@@ -172,7 +172,7 @@ void Jogo::updateInput()
             this->projetil.push_back(new Projetil(this->texture["PROJETIL"], 
                                                   atiradorPos.x , //posição do projetil
                                                   atiradorPos.y , 
-                                                  direction.x, direction.y, 5.f));
+                                                  direction.x, direction.y, 8.f));
         }
     }
 }
@@ -250,7 +250,8 @@ void Jogo::updateInimigoeCombate()
                 {
                     this->inimigos.erase(this->inimigos.begin() + i);
                     countInimigos += 1;
-                    if (countInimigos%10 == 1)
+
+                    if (countInimigos%10 == 0 and countInimigos != 0)
                     {
                         this->atirador->addRecarga(this->texture["RECARGA"]);
                     }

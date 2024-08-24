@@ -19,7 +19,7 @@ Atirador::Atirador()
 
 void Atirador::initVariables()
 {
-    this->movementSpeed = 5.f;
+    this->movementSpeed = 8.f;
     this->attackCooldownMax = 10.f;
     this->attackCooldown = this->attackCooldownMax;
     this->vida = 20;
@@ -145,7 +145,7 @@ void Atirador::addRecarga(sf::Texture *texture)
 {
     // Inicializa o sprite de recarga se ele não tiver sido inicializado antes
     this->reloadItem.setTexture(*texture);
-    this->reloadItem.setPosition(sf::Vector2f(300.f, 100.f)); // Posição inicial do sprite
+    this->reloadItem.setPosition(sf::Vector2f(400.f, 200.f)); // Posição inicial do sprite
 }
 
 void Atirador::updateRecarga()
