@@ -31,6 +31,9 @@ void Jogo::initTextures()
 
     this->texture["BACKGROUND"] = new Texture();
     this->texture["BACKGROUND"]->loadFromFile("Assests/BG/BackGround.png");
+
+    this->texture["RECARGA"] = new Texture();
+    this->texture["RECARGA"]->loadFromFile("Assests/Projetil/recarga.png");
 }
 
 
@@ -64,6 +67,7 @@ Jogo::Jogo()
     this->background.setTexture(*this->texture["BACKGROUND"]);
     this->base = new Base(); // Inicializa a base
     this->initStatus();
+    int countInimigos = 0;
 }
 
 
@@ -245,6 +249,11 @@ void Jogo::updateInimigoeCombate()
                 if (this->inimigos[i]->getHp() <= 0)
                 {
                     this->inimigos.erase(this->inimigos.begin() + i);
+                    countInimigos += 1;
+                    if (countInimigos%10 == 1)
+                    {
+                        this->atirador->addRecarga(this->texture["RECARGA"]);
+                    }
                 }
             }
         }
@@ -323,6 +332,8 @@ void Jogo::update()
 
    this->updateProjetil();
 
+   this->atirador->updateRecarga();
+
    this->updateInimigoeCombate();
 
    this->status->update(*this->atirador, *this->base);
@@ -350,6 +361,8 @@ void Jogo::render()
         inimigo->render(this->window); // Renderiza o inimigo
         inimigo->renderProjeteis(this->window); // Renderiza os projéteis do inimigo
     }
+
+    this->atirador->renderRecarga(this->window);
 
     this->status->render(this->window);
 
