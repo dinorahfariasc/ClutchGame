@@ -5,7 +5,7 @@
 Clutch é um jogo 2D do subgênero Shoot 'em up e com estética inspirada no CS 1.6. 
 No jogo o  usuário controla um atirador que esta encuralado em uma area de guerra por seus inimigos e seu unico objetivo é proteger a base e permanencer o maximo possivel vivo. Os inimigos aparecem aleatoriamente e caminham em direção ao jogador, disparando projéteis. A base é localizada no centro do mapa quando dentro dela se torna uma barrereira contra os ataques inimigos, mas acabar sua proteção a missão falha e o jogo acaba.
 
-# Para a Compilação do programa no terminal
+## Para a Compilação do programa no terminal
 Para compilar digite:
 `make` ou `mingw32-make`   
 
