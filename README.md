@@ -7,7 +7,8 @@ No jogo o  usuário controla um atirador que esta encuralado em uma area de guer
 
 # Para a Compilação do programa no terminal
 Para compilar digite:
-`make` ou `mingw32-make` 
+`make` ou `mingw32-make`   
+
 Para executar digite:
 `.\bin\app`
 
@@ -20,17 +21,17 @@ De preferência, estar utilizando o Visual Studio Code.
 https://youtu.be/88oO7P5FYQw?si=RN3_CH8hthVEL2zL
 
 ## Classes Principais
-1. Atirador
+1. **Atirador**
 A classe Atirador é responsável por gerenciar o jogador. Ela controla o movimento, a rotação, a vida, o número de projéteis disponíveis e a interação com o cenário, como a coleta de recargas. A classe também lida com a renderização do jogador na tela e a detecção de colisões com outros objetos.
 
-2. Inimigo
+2. **Inimigo**
 A classe Inimigo gerencia os oponentes que perseguem o jogador. Cada inimigo se movimenta em direção ao atirador, podendo disparar projéteis e causar dano. A classe controla a lógica de ataque, movimento e vida dos inimigos.
 
-3. Projetil
+3. **Projetil**
 A classe Projetil gerencia o comportamento dos projéteis disparados tanto pelo jogador quanto pelos inimigos. Ela lida com a trajetória dos projéteis, a detecção de colisões e a remoção de projéteis que saem da tela ou atingem seus alvos.
 
-4. Base
+4. **Base**
 A classe Base representa a área central do mapa onde o jogador pode se proteger temporariamente dos ataques inimigos. A base oferece uma barreira até que sua proteção acabe, momento em que o jogador deve sair e continuar se defendendo por conta própria.
 
-5. Jogo
+5. **Jogo**
 A classe Jogo é responsável por gerenciar o loop principal do jogo. Ela inicializa todas as entidades, processa as entradas do jogador, atualiza o estado do jogo, verifica condições de vitória ou derrota, e renderiza os elementos na tela. A classe Jogo conecta todas as outras classes, permitindo a interação e o funcionamento harmonioso do jogo.
