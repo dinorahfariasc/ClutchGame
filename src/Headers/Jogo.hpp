@@ -37,6 +37,7 @@ class Jogo
     float spawnTimer;
     float spawnTimerMax;
     vector<Inimigo*> inimigos;
+    int countInimigos;
 
     Status* status;
 

@@ -20,17 +20,25 @@ Status::Status(float vidaInicialAtirador, float vidaInicialBase, float projeteis
     this->vidaAtiradorText.setFont(this->font);
     this->vidaAtiradorText.setCharacterSize(24);
     this->vidaAtiradorText.setFillColor(sf::Color::Black);
+    this->vidaAtiradorText.setOutlineThickness(1.f);
+    this->vidaAtiradorText.setOutlineColor(sf::Color::White);
+    
     
 
     // Configura o texto para a vida da base
     this->vidaBaseText.setFont(this->font);
     this->vidaBaseText.setCharacterSize(24);
     this->vidaBaseText.setFillColor(sf::Color::Black);
+    this->vidaBaseText.setOutlineThickness(1.f);
+    this->vidaBaseText.setOutlineColor(sf::Color::White);
+    
 
     // Configura o texto para os projéteis disponíveis
     this->projeteisDisponiveisText.setFont(this->font);
     this->projeteisDisponiveisText.setCharacterSize(24);
     this->projeteisDisponiveisText.setFillColor(sf::Color::Black);
+    this->projeteisDisponiveisText.setOutlineThickness(1.f);
+    this->projeteisDisponiveisText.setOutlineColor(sf::Color::White);
 
     
 }

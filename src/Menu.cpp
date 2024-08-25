@@ -29,7 +29,7 @@ Menu::~Menu(){
 }
 
 void Menu::setValues(){
-    window->create(VideoMode(1200, 670), "Shoot 'em up", Style::Close | Style::Titlebar);
+    window->create(VideoMode(1200, 670), "Clutch", Style::Close | Style::Titlebar);
     
     pos =0;
     pressed = false;
@@ -44,7 +44,7 @@ void Menu::setValues(){
     music->setLoop(true);  // Configura a música para repetir continuamente
     music->play();
 
-    options = {"Shoot 'em up","Jogar", "Opcoes", "Sobre","Sair"};
+    options = {"Clutch","Jogar", "Opcoes", "Sobre","Sair"};
     texts.resize(5);
     coords = {{80, 70}, {80, 200}, {80, 250}, {80, 300}, {80, 350}};
     sizes = {80, 30, 30, 30, 30};

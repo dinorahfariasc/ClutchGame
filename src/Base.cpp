@@ -31,7 +31,7 @@ void Base::initTexture()
 void Base::initSprite()
 {
     this->sprite.setTexture(this->texture);
-    this->sprite.setPosition(250.f, 400.f);
+    this->sprite.setPosition(300.f, 450.f);
 }
 
 
